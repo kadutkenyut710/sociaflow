@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SociaFlow · Media Toolkit</title><meta name="description" content="SociaFlow, social media downloader dan media converter.">
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,Arial,sans-serif;background:#091321;color:#e9f4f5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 75% -12%,#264b56,transparent 48%),#091321;min-height:100vh}
+header,main,footer{max-width:960px;margin:auto;padding:24px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2b3b46}
+.logo{font-size:23px;font-weight:850;letter-spacing:-1.2px}.logo em{font-style:normal;color:#bdfa72}
+a{color:#d0fc97}small{color:#aab8c4}h1{font-size:clamp(42px,8vw,76px);letter-spacing:-3px;line-height:1.06;margin:80px 0 14px}
+h1 span{color:#c3fb78}.lead{color:#a2b3be;max-width:660px;line-height:1.8;font-size:17px}
+.card{background:#142332;border:1px solid #354754;padding:25px;border-radius:20px;margin:34px 0;box-shadow:0 18px 45px #0003}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.tab,button,select,input{font:inherit}.tab{border:1px solid #405360;background:#1f3342;color:#e6f3f2;padding:12px 17px;border-radius:11px;cursor:pointer}
+.tab.active{background:#c3fb78;color:#10271d;border-color:#c3fb78;font-weight:750}
+h2{margin:8px 0 9px}.sub{font-size:14px;color:#9cabb8;line-height:1.7}
+input,select{width:100%;background:#0b1725;border:1px solid #455b64;border-radius:11px;padding:15px;color:white;margin:15px 0}
+.primary{background:#c3fb78;border:0;color:#122718;padding:14px 20px;border-radius:11px;font-weight:800;cursor:pointer}
+.secondary{background:#213746;border:1px solid #435d69;color:white;padding:12px;border-radius:10px;cursor:pointer}
+.hidden{display:none}.message{padding:15px;background:#1a3641;border:1px solid #446273;border-radius:11px;margin-top:17px;line-height:1.7;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.mini{background:#12212f;border:1px solid #354857;border-radius:13px;padding:18px;color:#b6c8d1}
+footer{color:#899ca9;font-size:12px} .info{border-left:3px solid #c3fb78;padding-left:15px;color:#bcccd4}
+@media(max-width:600px){header,main,footer{padding:18px}h1{margin-top:45px;letter-spacing:-2px}.grid{grid-template-columns:1fr}.card{padding:20px}}
+</style></head><body><header><div class="logo">Socia<em>Flow</em></div><small>Media toolkit · Preview</small></header>
+<main><h1>Ambil kontennya.<br><span>Ubah formatnya.</span></h1>
+<p class="lead">Toolkit untuk mengambil konten publik dari tautan media sosial dan mengonversi file. Versi ini menyediakan konverter gambar lokal di browser. Unduhan sosial dan konverter video memerlukan server aplikasi.</p>
+<section class="card"><div class="tabs"><button class="tab active" id="tab1">Download dari link</button><button class="tab" id="tab2">Convert gambar</button></div>
+<div id="p1"><h2>Download postingan publik</h2><p class="sub">Facebook Reels, Threads, Instagram, TikTok, X dan lainnya. Fitur server sedang disiapkan.</p>
+<input id="url" type="url" placeholder="https://www.facebook.com/share/r/..." aria-label="URL postingan">
+<button id="example" class="secondary">Isi contoh Facebook Reels</button>
+<button id="check" class="primary">Cek tautan</button>
+<div id="status" class="message hidden" role="status"></div>
+</div>
+<div id="p2" class="hidden"><h2>Convert gambar gratis</h2><p class="sub">Berjalan langsung di browser tanpa mengirim gambar ke server. PNG, JPEG, WebP, BMP didukung pada kebanyakan browser.</p>
+<input id="image" type="file" accept="image/png,image/jpeg,image/webp,image/bmp">
+<label for="format">Format hasil</label><select id="format"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select>
+<button id="convert" class="primary">Convert & Download</button><div id="conv-status" class="message hidden" role="status"></div></div>
+</section><div class="grid"><div class="mini">🎥 Video MP4 / audio MP3 <p class="sub">Memerlukan backend FFmpeg</p></div><div class="mini">🖼️ Gambar JPG / PNG / WebP <p class="sub">Converter browser sudah tersedia</p></div><div class="mini">📝 Caption & Threads <p class="sub">Memerlukan backend extractor</p></div></div>
+<p class="info">SociaFlow tidak mengakses konten privat, DRM, atau konten yang meminta login. Gunakan hanya untuk konten yang berhak Anda simpan.</p></main>
+<footer>© SociaFlow · <a href="https://github.com/kadutkenyut710/sociaflow">Source on GitHub</a></footer>
+<script>
+const el=id=>document.getElementById(id),toggle=which=>{el('p1').classList.toggle('hidden',which!==1);el('p2').classList.toggle('hidden',which!==2);el('tab1').classList.toggle('active',which===1);el('tab2').classList.toggle('active',which===2)};
+el('tab1').onclick=()=>toggle(1);el('tab2').onclick=()=>toggle(2);
+el('example').onclick=()=>el('url').value='https://www.facebook.com/share/r/19ipj6wZTQ/';
+el('check').onclick=()=>{const s=el('status'),u=el('url').value.trim();s.classList.remove('hidden');try{let p=new URL(u);s.textContent=p.protocol!=='https:'?'Gunakan tautan HTTPS.':'Tautan valid secara format. Untuk menganalisis dan mengunduh media, server SociaFlow perlu diterbitkan terlebih dahulu.'}catch{s.textContent='Tautan tidak valid.'}};
+el('convert').onclick=async()=>{const f=el('image').files[0],s=el('conv-status');s.classList.remove('hidden');if(!f){s.textContent='Pilih gambar dahulu.';return}if(f.size>25*1024*1024){s.textContent='Maksimum gambar 25 MB pada versi browser.';return}
+try{const bitmap=await createImageBitmap(f);if(bitmap.width*bitmap.height>24000000)throw Error('Resolusi gambar terlalu besar.');const canvas=document.createElement('canvas');canvas.width=bitmap.width;canvas.height=bitmap.height;const ctx=canvas.getContext('2d');if(el('format').value==='image/jpeg'){ctx.fillStyle='white';ctx.fillRect(0,0,canvas.width,canvas.height)}ctx.drawImage(bitmap,0,0);bitmap.close();const kind=el('format').value;canvas.toBlob(blob=>{if(!blob){s.textContent='Konversi tidak didukung browser ini.';return}const link=document.createElement('a'),url=URL.createObjectURL(blob);link.href=url;link.download='sociaflow_'+f.name.replace(/\.[^.]+$/,'')+'.'+(kind==='image/jpeg'?'jpg':kind.split('/')[1]);link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);s.textContent='Gambar berhasil dikonversi dan diunduh.'},kind,0.92)}catch(err){s.textContent='Gagal memproses gambar: '+err.message}};
+</script></body></html>
